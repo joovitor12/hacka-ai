@@ -2,13 +2,14 @@ package com.apigit.entities;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Data
 public class ApiResponse {
     private String deployment;
-    private List<Message> messages;
+    private List<Message> messages = new ArrayList<>();
     private int temperature;
     private int n;
     private String stop;
