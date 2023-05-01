@@ -44,19 +44,5 @@ public class ApiService {
         body.getMessages().add(message);
         body.getMessages().add(messageSystem);
         body.getMessages().add(messageInsight);
-
-    }
-
-    public String createInsight(ComponentEnum componentEnum, String insight){
-        //primeiro encontra o componente que foi enviado no parametro da requisicao (ex: CONTATOS)
-        // depois disso concatena ele com a analise pedida pelo usuario
-        List<ComponentContext> list = componentContextService.findAll();
-        ComponentContext result = list.stream()
-                .filter(c -> c.getComponent().equals(componentEnum))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("Not founded component with name " + componentEnum));
-        String insightText = result.getContext() + " Com base no CONTEXTO passado, " + insight;
-        return insightText;
-
     }
 }

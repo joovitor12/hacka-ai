@@ -1,9 +1,6 @@
 package com.apigit.controllers;
 
 import com.apigit.entities.ApiResponse;
-import com.apigit.entities.ComponentContext;
-import com.apigit.entities.Message;
-import com.apigit.entities.MessageList;
 import com.apigit.enums.ComponentEnum;
 import com.apigit.services.ApiService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 
 
 @RestController
