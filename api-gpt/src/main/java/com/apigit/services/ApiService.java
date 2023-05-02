@@ -1,13 +1,12 @@
 package com.apigit.services;
 
-import com.apigit.entities.ApiResponse;
+import com.apigit.entities.GptModel;
 import com.apigit.entities.ComponentContext;
 import com.apigit.entities.Message;
 import com.apigit.enums.ComponentEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +15,7 @@ public class ApiService {
 
     @Autowired
     private ComponentContextService componentContextService;
-    public void setData(ApiResponse body, ComponentEnum componentEnum, String insight){
+    public void setData(GptModel body, ComponentEnum componentEnum, String insight){
         body.setDeployment("gpt-35-turbo");
         body.setTemperature(1);
         body.setN(1);

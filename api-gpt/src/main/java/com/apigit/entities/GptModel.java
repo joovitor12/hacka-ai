@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class ApiResponse {
+public class GptModel {
     private String deployment;
     private List<Message> messages = new ArrayList<>();
     private int temperature;

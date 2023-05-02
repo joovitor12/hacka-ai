@@ -1,6 +1,7 @@
 package com.apigit.controllers;
 
-import com.apigit.entities.ApiResponse;
+import com.apigit.entities.GptModel;
+import com.apigit.entities.GptResponseMessage;
 import com.apigit.enums.ComponentEnum;
 import com.apigit.services.ApiService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -8,52 +9,31 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 
 
 @RestController
 public class ApiController {
+
     @Autowired
     private ApiService service;
 
-    @PostMapping(value = "/post-question")
-    @CrossOrigin(origins = "https://secure-backend-api.stilingue.com.br")
-    public ResponseEntity<String> postQuestion(@RequestBody ApiResponse body){
-        service.setData(body, ComponentEnum.CONTATOS, body.getDeployment());
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("hack-ai-team-name", "studai");
-        headers.add("hack-ai-api-key", "6bv6E7biA840N6a5r232og");
-        HttpEntity<ApiResponse> requestEntity = new HttpEntity<>(body, headers);
-        RestTemplate restTemplate = new RestTemplate();
-
-        ResponseEntity<String> response = restTemplate.exchange(
-                "https://secure-backend-api.stilingue.com.br/blip-nlu-hack-ai/prod/hack-ai/chat/completions",
-                HttpMethod.POST,
-                requestEntity,
-                String.class);
-
-        return response;
-    }
-
     @PostMapping(value = "/create-insight")
     @CrossOrigin(origins = "https://secure-backend-api.stilingue.com.br")
-    public ResponseEntity<String> createInsight(@RequestBody String insight) throws JsonProcessingException {
+    public ResponseEntity<GptResponseMessage> createInsight(@RequestBody String insight, @RequestParam ComponentEnum component) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add("hack-ai-team-name", "studai");
-        headers.add("hack-ai-api-key", "6bv6E7biA840N6a5r232og");
+        headers.add("hack-ai-team-name", "YOUR_TEAM_NAME");
+        headers.add("hack-ai-api-key", "YOUR_API_KEY");
 
-        ApiResponse response = new ApiResponse();
-        service.setData(response, ComponentEnum.CONTATOS, insight);
+        GptModel response = new GptModel();
+        service.setData(response, component, insight);
 
-        HttpEntity<ApiResponse> requestEntity = new HttpEntity<>(response, headers);
+        HttpEntity<GptModel> requestEntity = new HttpEntity<>(response, headers);
 
         String url = "https://secure-backend-api.stilingue.com.br/blip-nlu-hack-ai/prod/hack-ai/chat/completions";
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestEntity, String.class );
@@ -65,8 +45,9 @@ public class ApiController {
 
         String content = rootNode.path("choices").get(0).path("message").path("content").asText();
 
+        GptResponseMessage responseMessage = new GptResponseMessage(content);
 
-        return ResponseEntity.ok().body(content);
+        return ResponseEntity.ok().body(responseMessage);
 
     }
 
